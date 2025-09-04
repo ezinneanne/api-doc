@@ -1,44 +1,52 @@
-name: Build API Documentation and Deploy to GitHub Pages
+# Name of the workflow
+name: Build and Deploy API Documentation
+
 
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
     paths:
-      - 'spec/greetings.yaml'
+      - 'docs/index.html'
+      - 'v1/openapi-v1.yaml'
+      - 'v2/openapi-v2.yaml'
+      - 'v3/openapi-v3.yaml'
+
 
 jobs:
-  build-spec:
+  build-and-deploy:
     runs-on: ubuntu-latest
     permissions:
       contents: write
 
+
     steps:
-      - name: Checkout code
+      # 1. Checkout the repository
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-
-      - name: Install Redocly CLI
-        run: npm install -g @redocly/cli
-
-      - name: Validate OpenAPI Spec
-        run: redocly lint spec/greetings.yaml
 
       # 2. Create build directory
       - name: Create build directory
         run: mkdir -p public
 
-      # 3. Copy YAML spec into public folder
-      - name: Copy spec/greetings
-        run: mkdir -p public/spec && cp spec/greetings.yaml public/spec/
+
+      # 3. Copy YAML specs into public folder
+      - name: Copy v1 spec
+        run: mkdir -p public/v1 && cp v1/openapi-v1.yaml public/v1/
+
+
+      - name: Copy v2 spec
+        run: mkdir -p public/v2 && cp v2/openapi-v2.yaml public/v2/
+
+
+      - name: Copy v3 spec
+        run: mkdir -p public/v3 && cp v3/openapi-v3.yaml public/v3/
+
 
       # 4. Copy landing page into public
       - name: Copy landing page
         run: cp docs/index.html public/index.html
+
 
       # 5. Deploy to GitHub Pages
       - name: Deploy to GitHub Pages
@@ -46,3 +54,5 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./public
+
+
