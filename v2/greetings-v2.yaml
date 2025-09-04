@@ -1,9 +1,9 @@
 openapi: 3.0.3
 info:
-  title: Sample API v2 
+  title: Greetings API v2 
   version: 2.0.0
   description: |
-    This is version 2 of the Sample API.
+    This is version 2 of the Greetings API.
     It supports reading existing greetings and creating new ones.
   license:
     name: MIT
